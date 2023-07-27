@@ -1,6 +1,7 @@
 package com.example.newsapp.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,19 +38,27 @@ fun TopNews(navController: NavController){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Top News", fontWeight = FontWeight.SemiBold)
         LazyColumn(){
-            items(MockData.topNewsList){
-                TopNewsItem(newsData = it)
+            items(MockData.topNewsList){ newsData ->
+                TopNewsItem(
+                    newsData = newsData,
+                    onClick = {
+                        navController.navigate("Detail/${newsData.id}")
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun TopNewsItem(newsData: NewsData){
+fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+                onClick()
+            },
         shape = RoundedCornerShape(20.dp)
     ) {
         Column {
@@ -68,11 +77,15 @@ fun TopNewsItem(newsData: NewsData){
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(newsData.title, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 18.sp)
-                Spacer(modifier = Modifier.height(15.dp).fillMaxWidth())
+                Spacer(modifier = Modifier
+                    .height(15.dp)
+                    .fillMaxWidth())
                 Row(
                 ){
                     Text(newsData.author, color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
-                    Text(newsData.publishedAt, color = Color.Gray, modifier = Modifier.weight(1.0f).align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
+                    Text(newsData.publishedAt, color = Color.Gray, modifier = Modifier
+                        .weight(1.0f)
+                        .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
                 }
             }
         }
