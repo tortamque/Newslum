@@ -88,7 +88,8 @@ fun DetailScreen(
         Text(
             newsData.description,
             Modifier
-                .padding(bottom = defaultPadding)
+                .padding(bottom = defaultPadding),
+            color = Color.Black
         )
 
         Button(
