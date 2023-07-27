@@ -1,7 +1,10 @@
 package com.example.newsapp.ui.screen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,8 +18,12 @@ import com.example.newsapp.R
 import com.example.newsapp.models.NewsData
 
 @Composable
-fun DetailScreen(navController: NavController, newsData: NewsData){
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+fun DetailScreen(
+    navController: NavController,
+    newsData: NewsData,
+    scrollState: ScrollState
+){
+    Column(modifier = Modifier.fillMaxWidth().verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Detail Screen", fontWeight = FontWeight.SemiBold)
         Button(onClick = {
             navController.popBackStack()
@@ -39,6 +46,7 @@ fun PreviewDetailScreen(){
             title = "Bear Spotted Roaming in National Park",
             description = "A bear was spotted roaming freely in the popular national park, causing temporary closures of some trails for safety measures.",
             publishedAt = "2023-07-15T12:00:00Z"
-        )
+        ),
+        rememberScrollState()
     )
 }
