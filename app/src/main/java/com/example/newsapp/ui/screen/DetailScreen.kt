@@ -10,14 +10,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TopNews(){
+fun DetailScreen(){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Top News", fontWeight = FontWeight.SemiBold)
+        Text(text = "Detail Screen", fontWeight = FontWeight.SemiBold)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewTopNews(){
-    TopNews()
+fun PreviewDetailScreen(){
+    DetailScreen()
 }
