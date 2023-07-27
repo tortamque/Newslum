@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,27 +42,31 @@ fun TopNews(navController: NavController){
 
 @Composable
 fun TopNewsItem(newsData: NewsData){
-    Box(
+    Card(
         modifier = Modifier
-        .height(200.dp)
-        .fillMaxWidth()
-        .padding(8.dp),
+            //.height(500.dp)
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(20.dp)
     ) {
-        Image(
-            painter = painterResource(id = newsData.imageId),
-            contentDescription = newsData.title,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-        Column(modifier = Modifier
-            .wrapContentHeight()
-            .padding(top = 16.dp, start = 16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(newsData.publishedAt, color = Color.White, fontWeight = FontWeight.SemiBold)
-            Spacer(modifier = Modifier.height(80.dp))
-            Text(newsData.title, color = Color.White, fontWeight = FontWeight.SemiBold)
-
+        Column {
+            Box(modifier = Modifier.height(200.dp)){
+                Image(
+                    painter = painterResource(id = newsData.imageId),
+                    contentDescription = newsData.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Column(modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(top = 15.dp, bottom = 15.dp, start = 30.dp, end = 30.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(newsData.title, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally))
+                Text(newsData.publishedAt, color = Color.Gray, modifier = Modifier.align(Alignment.End))
+            }
         }
     }
 }
