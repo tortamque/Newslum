@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,8 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsapp.R
 import com.example.newsapp.models.MockData
@@ -44,7 +48,6 @@ fun TopNews(navController: NavController){
 fun TopNewsItem(newsData: NewsData){
     Card(
         modifier = Modifier
-            //.height(500.dp)
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(20.dp)
@@ -64,8 +67,13 @@ fun TopNewsItem(newsData: NewsData){
                 .padding(top = 15.dp, bottom = 15.dp, start = 30.dp, end = 30.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(newsData.title, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally))
-                Text(newsData.publishedAt, color = Color.Gray, modifier = Modifier.align(Alignment.End))
+                Text(newsData.title, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 18.sp)
+                Spacer(modifier = Modifier.height(15.dp).fillMaxWidth())
+                Row(
+                ){
+                    Text(newsData.author, color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
+                    Text(newsData.publishedAt, color = Color.Gray, modifier = Modifier.weight(1.0f).align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
+                }
             }
         }
     }
