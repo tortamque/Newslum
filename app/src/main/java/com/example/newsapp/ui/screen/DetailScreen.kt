@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,9 +34,9 @@ import com.example.newsapp.models.NewsData
 fun DetailScreen(
     navController: NavController,
     newsData: NewsData,
-    scrollState: ScrollState
 ){
     val defaultPadding = 20.dp
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -118,6 +117,5 @@ fun PreviewDetailScreen(){
             description = "A bear was spotted roaming freely in the popular national park, causing temporary closures of some trails for safety measures.",
             publishedAt = "2023-07-15T12:00:00Z"
         ),
-        rememberScrollState()
     )
 }
