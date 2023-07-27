@@ -17,7 +17,7 @@ fun DetailScreen(navController: NavController){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Detail Screen", fontWeight = FontWeight.SemiBold)
         Button(onClick = {
-            navController.navigate("TopNews")
+            navController.popBackStack()
         }) {
             Text("Go to Top News Screen")
         }
