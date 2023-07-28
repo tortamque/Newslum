@@ -1,6 +1,7 @@
 package com.example.newsapp.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +51,7 @@ fun DetailScreen(
     val scrollState = rememberScrollState()
     
     Scaffold(
-        topBar = { DetailScreenAppBar(onBackPressed = {navController.popBackStack()})}
+        topBar = { DetailScreenAppBar(onBackPressed = {navController.popBackStack()}, title = newsData.title)}
     ) {paddingValues ->
         Column(
             modifier = Modifier
@@ -58,16 +59,8 @@ fun DetailScreen(
                 .verticalScroll(scrollState)
                 .padding(horizontal = 20.dp),
         ) {
-            Text(
-                text = newsData.title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .align(CenterHorizontally)
-                    .padding(top = defaultPadding + paddingValues.calculateTopPadding(), bottom = defaultPadding)
-            )
             Row(
-                Modifier.padding(bottom = defaultPadding/2)
+                Modifier.padding(bottom = defaultPadding/2, top = paddingValues.calculateTopPadding() + defaultPadding/2)
             ) {
                 Text(
                     newsData.author,
@@ -120,9 +113,20 @@ fun DetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreenAppBar(onBackPressed: ()->Unit = {}){
+fun DetailScreenAppBar(onBackPressed: ()->Unit = {}, title: String){
+    val scrollState = rememberScrollState()
+
     CenterAlignedTopAppBar(
-        title = {Text(text = "Details")},
+        title = {
+            Text(
+                text = title,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 21.sp,
+                modifier = Modifier
+                    .padding(start = 20.dp)
+                    .horizontalScroll(scrollState)
+            )
+        },
         navigationIcon = {
             IconButton(onClick = {onBackPressed()}) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
