@@ -3,6 +3,7 @@ package com.example.newsapp.ui.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,6 +47,7 @@ import com.example.newsapp.models.NewsData
 fun DetailScreen(
     navController: NavController,
     newsData: NewsData,
+    externalPaddingValues: PaddingValues
 ){
     val defaultPadding = 20.dp
     val scrollState = rememberScrollState()
@@ -57,7 +59,7 @@ fun DetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(horizontal = 20.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = externalPaddingValues.calculateBottomPadding()),
         ) {
             Row(
                 Modifier.padding(bottom = defaultPadding/2, top = paddingValues.calculateTopPadding() + defaultPadding/2)
@@ -148,5 +150,6 @@ fun PreviewDetailScreen(){
             description = "A bear was spotted roaming freely in the popular national park, causing temporary closures of some trails for safety measures.",
             publishedAt = "2023-07-15T12:00:00Z"
         ),
+        PaddingValues()
     )
 }

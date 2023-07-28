@@ -60,7 +60,7 @@ fun Navigation(navHostController: NavHostController, paddingValues: PaddingValue
         ){
             val id = it.arguments?.getInt("newsId")
             val newsData = MockData.getNews(id)
-            DetailScreen(navController = navHostController, newsData)
+            DetailScreen(navController = navHostController, newsData, paddingValues)
         }
     }
 }
