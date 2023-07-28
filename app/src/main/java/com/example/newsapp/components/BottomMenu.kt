@@ -27,8 +27,19 @@ fun BottomMenu(navController: NavController){
                 label = {Text(it.title)},
                 alwaysShowLabel = true,
                 selected = currentRoute == it.route,
-                onClick = { /*TODO*/ },
-                icon = { Icon(imageVector = it.icon, contentDescription = it.title) }
+                icon = { Icon(imageVector = it.icon, contentDescription = it.title) },
+                onClick = {
+                    navController.navigate(it.route){
+                        navController.graph.startDestinationRoute?.let{route ->
+                            popUpTo(route){
+                                saveState = true
+                            }
+                        }
+
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         }
     }
