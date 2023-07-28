@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.squareup.moshi:moshi-kotlin:1.9.3'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'androidx.compose.material:material-icons-extended:1.4.3'
     implementation("androidx.navigation:navigation-compose:2.7.0-rc01")
