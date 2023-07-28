@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsapp.R
 import com.example.newsapp.models.MockData
+import com.example.newsapp.models.MockData.getTimeAgo
 import com.example.newsapp.models.NewsData
 
 @Composable
@@ -83,7 +84,7 @@ fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
                 Row(
                 ){
                     Text(newsData.author, color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
-                    Text(newsData.publishedAt, color = Color.Gray, modifier = Modifier
+                    Text(MockData.stringToDate(newsData.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
                         .weight(1.0f)
                         .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
                 }

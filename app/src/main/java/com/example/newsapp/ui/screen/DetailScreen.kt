@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.R
+import com.example.newsapp.models.MockData
+import com.example.newsapp.models.MockData.getTimeAgo
 import com.example.newsapp.models.NewsData
 
 
@@ -74,7 +76,7 @@ fun DetailScreen(
                     fontSize = 16.sp
                 )
                 Text(
-                    newsData.publishedAt,
+                    MockData.stringToDate(newsData.publishedAt).getTimeAgo(),
                     color = Color.Gray,
                     modifier = Modifier
                         .weight(1.0f)
