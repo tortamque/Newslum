@@ -84,8 +84,7 @@ fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
                 Spacer(modifier = Modifier
                     .height(15.dp)
                     .fillMaxWidth())
-                Row(
-                ){
+                Row{
                     Text(newsData.author, color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
                     Text(MockData.stringToDate(newsData.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
                         .weight(1.0f)
