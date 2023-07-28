@@ -38,10 +38,20 @@ import com.example.newsapp.models.NewsData
 @Composable
 fun TopNews(navController: NavController, paddingValues: PaddingValues){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Top News", fontWeight = FontWeight.SemiBold)
         LazyColumn(
-            Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
         ){
+            item {
+                Text(
+                    text = "Top News",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                )
+            }
+
             items(MockData.topNewsList){ newsData ->
                 TopNewsItem(
                     newsData = newsData,
