@@ -10,7 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.R
 import com.example.newsapp.models.NewsData
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     navController: NavController,
@@ -37,71 +46,87 @@ fun DetailScreen(
 ){
     val defaultPadding = 20.dp
     val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(horizontal = 20.dp),
-    ) {
-        Text(
-            text = newsData.title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
+    
+    Scaffold(
+        topBar = { DetailScreenAppBar(onBackPressed = {navController.popBackStack()})}
+    ) {paddingValues ->
+        Column(
             modifier = Modifier
-                .align(CenterHorizontally)
-                .padding(vertical = defaultPadding)
-        )
-
-        Row(
-            Modifier.padding(bottom = defaultPadding/2)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(horizontal = 20.dp),
         ) {
             Text(
-                newsData.author,
-                color = Color.Black,
-                modifier = Modifier.weight(1.0f),
-                fontSize = 16.sp
-            )
-            Text(
-                newsData.publishedAt,
-                color = Color.Gray,
+                text = newsData.title,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
-                    .weight(1.0f)
-                    .align(Alignment.Bottom),
-                textAlign = TextAlign.End,
-                fontSize = 14.sp
+                    .align(CenterHorizontally)
+                    .padding(top = defaultPadding + paddingValues.calculateTopPadding(), bottom = defaultPadding)
             )
-        }
+            Row(
+                Modifier.padding(bottom = defaultPadding/2)
+            ) {
+                Text(
+                    newsData.author,
+                    color = Color.Black,
+                    modifier = Modifier.weight(1.0f),
+                    fontSize = 16.sp
+                )
+                Text(
+                    newsData.publishedAt,
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .align(Alignment.Bottom),
+                    textAlign = TextAlign.End,
+                    fontSize = 14.sp
+                )
+            }
 
-        Image(
-            painter = painterResource(id = newsData.imageId),
-            contentDescription = newsData.title,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(bottom = defaultPadding)
-                .clip(RoundedCornerShape(10.dp))
-        )
+            Image(
+                painter = painterResource(id = newsData.imageId),
+                contentDescription = newsData.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(bottom = defaultPadding)
+                    .clip(RoundedCornerShape(10.dp))
+            )
 
-        Text(
-            newsData.description,
-            Modifier
-                .padding(bottom = defaultPadding),
-            color = Color.Black
-        )
+            Text(
+                newsData.description,
+                Modifier
+                    .padding(bottom = defaultPadding),
+                color = Color.Black
+            )
 
-        Button(
-            onClick = {
-                navController.popBackStack()
-            },
-            modifier = Modifier
-                .padding(bottom = defaultPadding)
-                .align(CenterHorizontally)
-        ) {
-            Text("Go Back")
+            Button(
+                onClick = {
+                    navController.popBackStack()
+                },
+                modifier = Modifier
+                    .padding(bottom = defaultPadding)
+                    .align(CenterHorizontally)
+            ) {
+                Text("Go Back")
+            }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetailScreenAppBar(onBackPressed: ()->Unit = {}){
+    CenterAlignedTopAppBar(
+        title = {Text(text = "Details")},
+        navigationIcon = {
+            IconButton(onClick = {onBackPressed()}) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+        },
+    )
 }
 
 @Preview(showBackground = true)
