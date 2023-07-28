@@ -1,6 +1,7 @@
 package com.example.newsapp.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,7 @@ import androidx.navigation.navArgument
 import com.example.newsapp.components.BottomMenu
 import com.example.newsapp.models.BottomMenuScreen
 import com.example.newsapp.models.MockData
+import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.ui.screen.Categories
 import com.example.newsapp.ui.screen.DetailScreen
 import com.example.newsapp.ui.screen.Sources
@@ -41,7 +43,10 @@ fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
 }
 
 @Composable
-fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues){
+fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues, newsManager: NewsManager = NewsManager()){
+    val articles = newsManager.newsResponse.value.articles
+    Log.d("articles", articles.toString())
+
     NavHost(navController = navHostController, startDestination = "TopNews"){
         bottomNavigation(navController = navHostController, paddingValues = paddingValues)
 
