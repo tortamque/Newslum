@@ -1,27 +1,51 @@
 package com.example.newsapp.ui
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.newsapp.components.BottomMenu
+import com.example.newsapp.models.BottomMenuScreen
 import com.example.newsapp.models.MockData
+import com.example.newsapp.ui.screen.Categories
 import com.example.newsapp.ui.screen.DetailScreen
+import com.example.newsapp.ui.screen.Sources
 import com.example.newsapp.ui.screen.TopNews
 
 @Composable
 fun NewsApp(){
-    Navigation()
+    val navController = rememberNavController()
+    val scrollState = rememberScrollState()
+
+    MainScreen(navController, scrollState)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
+    Scaffold(bottomBar = { BottomMenu(navController = navHostController)}) {
+        Navigation(navHostController)
+    }
 }
 
 @Composable
-fun Navigation(){
-    val navController = rememberNavController()
+fun Navigation(navHostController: NavHostController){
+    NavHost(navController = navHostController, startDestination = "TopNews"){
+        bottomNavigation(navController = navHostController)
 
-    NavHost(navController = navController, startDestination = "TopNews"){
         composable("TopNews"){
-            TopNews(navController = navController)
+            TopNews(navController = navHostController)
         }
 
         composable(
@@ -30,7 +54,19 @@ fun Navigation(){
         ){
             val id = it.arguments?.getInt("newsId")
             val newsData = MockData.getNews(id)
-            DetailScreen(navController = navController, newsData)
+            DetailScreen(navController = navHostController, newsData)
         }
+    }
+}
+
+fun NavGraphBuilder.bottomNavigation(navController: NavController){
+    composable(BottomMenuScreen.TopNews.route){
+        TopNews(navController = navController)
+    }
+    composable(BottomMenuScreen.Categories.route){
+        Categories()
+    }
+    composable(BottomMenuScreen.Sources.route){
+        Sources()
     }
 }

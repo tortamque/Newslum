@@ -1,0 +1,12 @@
+package com.example.newsapp.models
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.ui.graphics.vector.ImageVector
+
+sealed class BottomMenuScreen(val route: String, val icon: ImageVector, val title: String){
+    object TopNews: BottomMenuScreen("TopNews", Icons.Outlined.Home, "Top News")
+    object Categories: BottomMenuScreen("Categories", Icons.Outlined.Category, "Categories")
+    object Sources: BottomMenuScreen("Sources", Icons.Outlined.Home, "Sources")
+}
