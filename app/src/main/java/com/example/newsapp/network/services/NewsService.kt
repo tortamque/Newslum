@@ -1,4 +1,4 @@
-package com.example.newsapp.models.services
+package com.example.newsapp.network.services
 
 import com.example.newsapp.models.repository.TopNewsResponse
 import retrofit2.Call
