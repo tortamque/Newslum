@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,10 +36,12 @@ import com.example.newsapp.models.MockData.getTimeAgo
 import com.example.newsapp.models.NewsData
 
 @Composable
-fun TopNews(navController: NavController){
+fun TopNews(navController: NavController, paddingValues: PaddingValues){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Top News", fontWeight = FontWeight.SemiBold)
-        LazyColumn(){
+        LazyColumn(
+            Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+        ){
             items(MockData.topNewsList){ newsData ->
                 TopNewsItem(
                     newsData = newsData,

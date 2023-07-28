@@ -2,6 +2,7 @@ package com.example.newsapp.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -35,17 +36,17 @@ fun NewsApp(){
 @Composable
 fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
     Scaffold(bottomBar = { BottomMenu(navController = navHostController)}) {
-        Navigation(navHostController)
+        Navigation(navHostController, it)
     }
 }
 
 @Composable
-fun Navigation(navHostController: NavHostController){
+fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues){
     NavHost(navController = navHostController, startDestination = "TopNews"){
-        bottomNavigation(navController = navHostController)
+        bottomNavigation(navController = navHostController, paddingValues = paddingValues)
 
         composable("TopNews"){
-            TopNews(navController = navHostController)
+            TopNews(navController = navHostController, paddingValues = paddingValues)
         }
 
         composable(
@@ -59,9 +60,9 @@ fun Navigation(navHostController: NavHostController){
     }
 }
 
-fun NavGraphBuilder.bottomNavigation(navController: NavController){
+fun NavGraphBuilder.bottomNavigation(navController: NavController, paddingValues: PaddingValues){
     composable(BottomMenuScreen.TopNews.route){
-        TopNews(navController = navController)
+        TopNews(navController = navController, paddingValues = paddingValues)
     }
     composable(BottomMenuScreen.Categories.route){
         Categories()
