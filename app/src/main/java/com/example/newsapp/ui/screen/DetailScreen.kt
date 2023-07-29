@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +53,7 @@ fun DetailScreen(
 ){
     val defaultPadding = 20.dp
     val scrollState = rememberScrollState()
+    val urlHandler = LocalUriHandler.current
     
     Scaffold(
         topBar = {
@@ -113,13 +115,15 @@ fun DetailScreen(
 
             Button(
                 onClick = {
-                    navController.popBackStack()
+                    article.url?.let {
+                        urlHandler.openUri(it)
+                    }
                 },
                 modifier = Modifier
                     .padding(bottom = defaultPadding)
                     .align(CenterHorizontally)
             ) {
-                Text("Go Back")
+                Text("Read full article")
             }
         }
     }
