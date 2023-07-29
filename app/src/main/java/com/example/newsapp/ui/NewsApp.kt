@@ -1,7 +1,6 @@
 package com.example.newsapp.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsapp.components.BottomMenu
 import com.example.newsapp.models.BottomMenuScreen
-import com.example.newsapp.models.MockData
+import com.example.newsapp.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.ui.screen.Categories
 import com.example.newsapp.ui.screen.DetailScreen
@@ -45,29 +44,27 @@ fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
 @Composable
 fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues, newsManager: NewsManager = NewsManager()){
     val articles = newsManager.newsResponse.value.articles
-    Log.d("articles", articles.toString())
+    articles?.let {
+        NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
+            bottomNavigation(navController = navHostController, paddingValues = paddingValues, articles = articles)
+            composable(
+                "Detail/{index}",
+                arguments = listOf(navArgument("index") { type = NavType.IntType })
+            ){
+                val index = it.arguments?.getInt("index")
+                index?.let {
+                    val article = articles[index]
 
-    NavHost(navController = navHostController, startDestination = "TopNews"){
-        bottomNavigation(navController = navHostController, paddingValues = paddingValues)
-
-        composable("TopNews"){
-            TopNews(navController = navHostController, paddingValues = paddingValues)
-        }
-
-        composable(
-            "Detail/{newsId}",
-            arguments = listOf(navArgument("newsId") { type = NavType.IntType })
-        ){
-            val id = it.arguments?.getInt("newsId")
-            val newsData = MockData.getNews(id)
-            DetailScreen(navController = navHostController, newsData, paddingValues)
+                    DetailScreen(navController = navHostController, article, paddingValues)
+                }
+            }
         }
     }
 }
 
-fun NavGraphBuilder.bottomNavigation(navController: NavController, paddingValues: PaddingValues){
+fun NavGraphBuilder.bottomNavigation(navController: NavController, paddingValues: PaddingValues, articles: List<TopNewsArticle>){
     composable(BottomMenuScreen.TopNews.route){
-        TopNews(navController = navController, paddingValues = paddingValues)
+        TopNews(navController = navController, paddingValues = paddingValues, articles = articles)
     }
     composable(BottomMenuScreen.Categories.route){
         Categories()

@@ -32,7 +32,6 @@ class NewsManager {
             ) {
                 if(response.isSuccessful){
                     _newsResponse.value = response.body()!!
-                    Log.d("Success", _newsResponse.value.toString())
                 } else{
                     Log.d("Error", response.errorBody().toString())
                 }

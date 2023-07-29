@@ -1,6 +1,5 @@
 package com.example.newsapp.ui.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -22,8 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,10 +32,11 @@ import androidx.navigation.NavController
 import com.example.newsapp.R
 import com.example.newsapp.models.MockData
 import com.example.newsapp.models.MockData.getTimeAgo
-import com.example.newsapp.models.NewsData
+import com.example.newsapp.models.repository.TopNewsArticle
+import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun TopNews(navController: NavController, paddingValues: PaddingValues){
+fun TopNews(navController: NavController, paddingValues: PaddingValues, articles: List<TopNewsArticle>){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,11 +52,11 @@ fun TopNews(navController: NavController, paddingValues: PaddingValues){
                 )
             }
 
-            items(MockData.topNewsList){ newsData ->
+            items(articles.size){ index ->
                 TopNewsItem(
-                    newsData = newsData,
+                    article = articles[index],
                     onClick = {
-                        navController.navigate("Detail/${newsData.id}")
+                        navController.navigate("Detail/$index")
                     }
                 )
             }
@@ -65,7 +65,7 @@ fun TopNews(navController: NavController, paddingValues: PaddingValues){
 }
 
 @Composable
-fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
+fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,10 +77,11 @@ fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
     ) {
         Column {
             Box(modifier = Modifier.height(200.dp)){
-                Image(
-                    painter = painterResource(id = newsData.imageId),
-                    contentDescription = newsData.title,
+                CoilImage(
+                    imageModel = article.urlToImage,
                     contentScale = ContentScale.Crop,
+                    error = ImageBitmap.imageResource(id = R.drawable.placeholder),
+                    placeHolder = ImageBitmap.imageResource(id = R.drawable.placeholder),
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -90,13 +91,13 @@ fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
                 .padding(top = 15.dp, bottom = 15.dp, start = 30.dp, end = 30.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(newsData.title, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 18.sp)
+                Text(article.title!!, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 18.sp)
                 Spacer(modifier = Modifier
                     .height(15.dp)
                     .fillMaxWidth())
                 Row{
-                    Text(newsData.author, color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
-                    Text(MockData.stringToDate(newsData.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
+                    Text(article.author?:"Unknown", color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
+                    Text(MockData.stringToDate(article.publishedAt!!).getTimeAgo(), color = Color.Gray, modifier = Modifier
                         .weight(1.0f)
                         .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
                 }
@@ -108,11 +109,8 @@ fun TopNewsItem(newsData: NewsData, onClick: ()->Unit = {}){
 @Preview(showBackground = true)
 @Composable
 fun PreviewTopNews(){
-    //TopNews(rememberNavController())
     TopNewsItem(
-        NewsData(
-            id = 2,
-            imageId = R.drawable.football,
+        TopNewsArticle(
             author = "Jane Smith",
             title = "Exciting Football Match Ends in Draw",
             description = "In a thrilling football match, the two teams battled it out to a draw, with both sides displaying exceptional skills and teamwork.",
