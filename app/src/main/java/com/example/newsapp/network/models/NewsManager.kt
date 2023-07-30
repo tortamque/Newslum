@@ -2,9 +2,12 @@ package com.example.newsapp.network.models
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.example.newsapp.models.ArticleCategory
+import com.example.newsapp.models.getCategory
 import com.example.newsapp.models.repository.TopNewsResponse
 import com.example.newsapp.network.objects.Api
 import com.example.newsapp.sensitive.Sensitive
@@ -18,6 +21,8 @@ class NewsManager {
         @Composable get() = remember {
             _newsResponse
         }
+
+    val selectedCategory: MutableState<ArticleCategory?> = mutableStateOf(null)
 
     init {
         getArticles()
@@ -41,5 +46,10 @@ class NewsManager {
                 Log.d("Error", t.printStackTrace().toString())
             }
         })
+    }
+
+    fun onSelectedCategoryChanged(category: String){
+        val newCategory = getCategory(category)
+        selectedCategory.value = newCategory
     }
 }
