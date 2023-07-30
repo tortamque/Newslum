@@ -14,7 +14,7 @@ import com.example.newsapp.models.BottomMenuScreen
 
 @Composable
 fun BottomMenu(navController: NavController){
-    val menuItems = listOf(BottomMenuScreen.TopNews, BottomMenuScreen.Categories, BottomMenuScreen.Sources)
+    val menuItems = listOf(BottomMenuScreen.TopNews, BottomMenuScreen.Sources)
 
     NavigationBar(
         contentColor = Color.White
