@@ -20,7 +20,21 @@ fun Categories(
     onFetch: (String) -> Unit = {},
     newsManager: NewsManager
 ){
+    val categories = getAllCategories()
 
+    Column {
+        LazyRow{
+            items(categories.size){
+                val category = categories[it]
+
+                CategoryTab(
+                    category = category.categoryName,
+                    onFetch = onFetch,
+                    isSelected = newsManager.selectedCategory.value == category
+                )
+            }
+        }
+    }
 }
 
 @Composable
