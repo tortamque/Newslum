@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.newsapp.models.getAllCategories
@@ -46,6 +45,9 @@ fun CategoryTab(
     val backgroundColor =
         if(isSelected) MaterialTheme.colorScheme.primary
         else MaterialTheme.colorScheme.primaryContainer
+    val textColor =
+        if(isSelected) MaterialTheme.colorScheme.onPrimary
+        else MaterialTheme.colorScheme.onPrimaryContainer
 
     Surface(
         modifier = Modifier
@@ -59,7 +61,7 @@ fun CategoryTab(
         Text(
             text = category,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.White,
+            color = textColor,
             modifier = Modifier
                 .padding(8.dp)
         )
