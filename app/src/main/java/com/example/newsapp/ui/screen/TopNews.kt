@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsapp.R
+import com.example.newsapp.components.CategoriesTab
 import com.example.newsapp.models.MockData
 import com.example.newsapp.models.MockData.getTimeAgo
 import com.example.newsapp.models.repository.TopNewsArticle
