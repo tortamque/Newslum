@@ -15,18 +15,21 @@ import com.example.newsapp.models.getAllCategories
 import com.example.newsapp.network.models.NewsManager
 
 @Composable
-fun Categories(
+fun CategoriesTab(
     onFetch: (String) -> Unit = {},
     newsManager: NewsManager
 ){
     val categories = getAllCategories()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+    ){
         LazyRow{
             items(categories.size){
                 val category = categories[it]
 
-                CategoryTab(
+                CategoryItem(
                     category = category.categoryName,
                     onFetch = onFetch,
                     isSelected = newsManager.selectedCategory.value == category
@@ -37,7 +40,7 @@ fun Categories(
 }
 
 @Composable
-fun CategoryTab(
+fun CategoryItem(
     category: String,
     isSelected: Boolean = false,
     onFetch: (String) -> Unit
@@ -51,7 +54,7 @@ fun CategoryTab(
 
     Surface(
         modifier = Modifier
-            .padding(horizontal = 4.dp, vertical = 16.dp)
+            .padding(horizontal = 4.dp)
             .clickable {
                 onFetch(category)
             },
@@ -71,5 +74,5 @@ fun CategoryTab(
 @Preview(showBackground = true)
 @Composable
 fun CategoryTabPreview(){
-    CategoryTab(category = "Sport", onFetch = {}, isSelected = true)
+    CategoryItem(category = "Sport", onFetch = {}, isSelected = true)
 }

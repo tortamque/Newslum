@@ -33,10 +33,11 @@ import com.example.newsapp.R
 import com.example.newsapp.models.MockData
 import com.example.newsapp.models.MockData.getTimeAgo
 import com.example.newsapp.models.repository.TopNewsArticle
+import com.example.newsapp.network.models.NewsManager
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun TopNews(navController: NavController, paddingValues: PaddingValues, articles: List<TopNewsArticle>){
+fun TopNews(navController: NavController, paddingValues: PaddingValues, articles: List<TopNewsArticle>, newsManager: NewsManager){
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,8 +49,16 @@ fun TopNews(navController: NavController, paddingValues: PaddingValues, articles
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
                     modifier = Modifier
-                        .padding(vertical = 10.dp)
+                        .padding(top = 10.dp)
                 )
+            }
+
+            item {
+                CategoriesTab(
+                    newsManager = newsManager,
+                    onFetch = {category ->
+                    newsManager.onSelectedCategoryChanged(category)
+                })
             }
 
             items(articles.size){ index ->
@@ -69,7 +78,7 @@ fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(10.dp)
             .clickable {
                 onClick()
             },

@@ -19,7 +19,6 @@ import com.example.newsapp.components.BottomMenu
 import com.example.newsapp.models.BottomMenuScreen
 import com.example.newsapp.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
-import com.example.newsapp.ui.screen.Categories
 import com.example.newsapp.ui.screen.DetailScreen
 import com.example.newsapp.ui.screen.Sources
 import com.example.newsapp.ui.screen.TopNews
