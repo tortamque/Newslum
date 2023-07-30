@@ -3,13 +3,13 @@ package com.example.newsapp.models
 import com.example.newsapp.models.ArticleCategory.*
 
 enum class ArticleCategory(val categoryName: String){
-    BUSINESS("business"),
-    ENTERTAINMENT("entertainment"),
-    GENERAL("general"),
-    HEALTH("health"),
-    SCIENCE("science"),
-    SPORTS("sports"),
-    TECHNOLOGY("technology")
+    BUSINESS("Business"),
+    ENTERTAINMENT("Entertainment"),
+    GENERAL("General"),
+    HEALTH("Health"),
+    SCIENCE("Science"),
+    SPORTS("Sports"),
+    TECHNOLOGY("Technology")
 }
 
 fun getAllCategories(): List<ArticleCategory>{
