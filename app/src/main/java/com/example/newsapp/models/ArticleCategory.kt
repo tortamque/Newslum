@@ -2,18 +2,20 @@ package com.example.newsapp.models
 
 import com.example.newsapp.models.ArticleCategory.*
 
-enum class ArticleCategory(val categoryName: String){
-    BUSINESS("Business"),
-    ENTERTAINMENT("Entertainment"),
-    GENERAL("General"),
-    HEALTH("Health"),
-    SCIENCE("Science"),
-    SPORTS("Sports"),
-    TECHNOLOGY("Technology")
+enum class ArticleCategory(val categoryName: String, val categoryKey: String){
+    BUSINESS("Business", "Business"),
+    ENTERTAINMENT("Entertainment", "Entertainment"),
+    GENERAL("General", "General"),
+    HEALTH("Health", "Health"),
+    SCIENCE("Science", "Science"),
+    SPORTS("Sports", "Sports"),
+    TECHNOLOGY("Technology", "Technology"),
+    ALL_NEWS("All news", "")
 }
 
 fun getAllCategories(): List<ArticleCategory>{
     return listOf(
+        ALL_NEWS,
         BUSINESS,
         ENTERTAINMENT,
         GENERAL,
@@ -24,8 +26,8 @@ fun getAllCategories(): List<ArticleCategory>{
     )
 }
 
-fun getCategory(name: String): ArticleCategory?{
+fun getCategory(name: String): ArticleCategory{
     val map = values().associateBy(ArticleCategory::categoryName)
 
-    return map[name]
+    return map[name]!!
 }

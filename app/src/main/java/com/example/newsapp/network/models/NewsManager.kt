@@ -1,11 +1,8 @@
 package com.example.newsapp.network.models
 
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import com.example.newsapp.models.ArticleCategory
 import com.example.newsapp.models.getCategory
 import com.example.newsapp.models.repository.TopNewsResponse
@@ -16,27 +13,20 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class NewsManager {
-    private val _newsResponse = mutableStateOf(TopNewsResponse())
-    val newsResponse: State<TopNewsResponse>
-        @Composable get() = remember {
-            _newsResponse
-        }
+    private val _getArticleByCategory = mutableStateOf(TopNewsResponse())
+    val getArticlesByCategory: MutableState<TopNewsResponse> = _getArticleByCategory
 
-    val selectedCategory: MutableState<ArticleCategory?> = mutableStateOf(null)
+    val selectedCategory: MutableState<ArticleCategory> = mutableStateOf(ArticleCategory.ALL_NEWS)
 
-    init {
-        getArticles()
-    }
-
-    private fun getArticles(){
-        val service = Api.retrofitService.getTopArticles("us", Sensitive.API_KEY)
+    fun getArticlesByCategory(category: String){
+        val service = Api.retrofitService.getArticlesByCategory(category, "us", Sensitive.API_KEY)
         service.enqueue(object: Callback<TopNewsResponse> {
             override fun onResponse(
                 call: Call<TopNewsResponse>,
                 response: Response<TopNewsResponse>
             ) {
                 if(response.isSuccessful){
-                    _newsResponse.value = response.body()!!
+                    _getArticleByCategory.value = response.body()!!
                 } else{
                     Log.d("Error", response.errorBody().toString())
                 }
@@ -48,8 +38,8 @@ class NewsManager {
         })
     }
 
-    fun onSelectedCategoryChanged(category: String){
-        val newCategory = getCategory(category)
+    fun onSelectedCategoryChanged(category: ArticleCategory){
+        val newCategory = getCategory(category.categoryName)
         selectedCategory.value = newCategory
     }
 }

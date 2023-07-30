@@ -1,5 +1,6 @@
 package com.example.newsapp.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,7 +59,8 @@ fun TopNews(navController: NavController, paddingValues: PaddingValues, articles
                 CategoriesTab(
                     newsManager = newsManager,
                     onFetch = {category ->
-                    newsManager.onSelectedCategoryChanged(category)
+                        newsManager.onSelectedCategoryChanged(category)
+                        newsManager.getArticlesByCategory(category.categoryKey)
                 })
             }
 
@@ -71,6 +73,7 @@ fun TopNews(navController: NavController, paddingValues: PaddingValues, articles
                 )
             }
         }
+
     }
 }
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -41,26 +42,29 @@ fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
 }
 
 @Composable
-fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues, newsManager: NewsManager = NewsManager()){
-    val articles = newsManager.newsResponse.value.articles
-    articles?.let {
-        NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
-            bottomNavigation(
-                navController = navHostController,
-                paddingValues = paddingValues,
-                articles = articles,
-                newsManager
-            )
-            composable(
-                "Detail/{index}",
-                arguments = listOf(navArgument("index") { type = NavType.IntType })
-            ){
-                val index = it.arguments?.getInt("index")
-                index?.let {
-                    val article = articles[index]
+fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues){
+    val newsManager = remember {
+        NewsManager()
+    }
 
-                    DetailScreen(navController = navHostController, article, paddingValues)
-                }
+    val articles = newsManager.getArticlesByCategory.value.articles ?: listOf()
+
+    NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
+        bottomNavigation(
+            navController = navHostController,
+            paddingValues = paddingValues,
+            articles = articles,
+            newsManager
+        )
+        composable(
+            "Detail/{index}",
+            arguments = listOf(navArgument("index") { type = NavType.IntType })
+        ){
+            val index = it.arguments?.getInt("index")
+            index?.let {
+                val article = articles[index]
+
+                DetailScreen(navController = navHostController, article, paddingValues)
             }
         }
     }
