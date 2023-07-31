@@ -1,5 +1,6 @@
 package com.example.newsapp.ui.screen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,42 +42,43 @@ import com.example.newsapp.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
 import com.skydoves.landscapist.coil.CoilImage
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopNews(navController: NavController, paddingValues: PaddingValues, articles: List<TopNewsArticle>, newsManager: NewsManager){
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        LazyColumn(
+    Scaffold(
+        topBar = { CenterAlignedTopAppBar(
+            title = { Text("Top News") }
+        )}
+    ){ paddingValues ->
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
-        ){
-            item {
-                Text(
-                    text = "Top News",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                )
-            }
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxWidth(),
+        ) {
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+            ){
+                item {
+                    CategoriesTab(
+                        newsManager = newsManager,
+                        onFetch = {category ->
+                            newsManager.onSelectedCategoryChanged(category)
+                            newsManager.getArticlesByCategory(category.categoryKey)
+                        })
+                }
 
-            item {
-                CategoriesTab(
-                    newsManager = newsManager,
-                    onFetch = {category ->
-                        newsManager.onSelectedCategoryChanged(category)
-                        newsManager.getArticlesByCategory(category.categoryKey)
-                })
-            }
-
-            items(articles.size){ index ->
-                TopNewsItem(
-                    article = articles[index],
-                    onClick = {
-                        navController.navigate("Detail/$index")
-                    }
-                )
+                items(articles.size){ index ->
+                    TopNewsItem(
+                        article = articles[index],
+                        onClick = {
+                            navController.navigate("Detail/$index")
+                        }
+                    )
+                }
             }
         }
-
     }
 }
 
