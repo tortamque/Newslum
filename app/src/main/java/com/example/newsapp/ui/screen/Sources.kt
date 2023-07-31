@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.network.models.SourcesEnum
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,18 +28,11 @@ import com.example.newsapp.network.models.NewsManager
 fun Sources(
     newsManager: NewsManager
 ){
-    val items = listOf(
-        "TechCrunch" to "techcrunch",
-        "TalkSport" to "talksport",
-        "Business Insider" to "business-insider",
-        "Reuters" to "reuters",
-        "Politico" to "politico",
-        "TheVerge" to "the-verge"
-    )
+    val items = SourcesEnum.values()
 
     Scaffold(
         topBar = { TopAppBar(
-            title = { Text(text = "News from ${newsManager.sourceName.value}")},
+            title = { Text(text = "News from ${newsManager.sourceName.value.sourceName}")},
             actions = {
                 var isMenuExpanded by remember { mutableStateOf(false)}
                 IconButton(onClick = {
@@ -58,10 +52,10 @@ fun Sources(
                         items.forEach {
                             DropdownMenuItem(
                                 text = {
-                                       Text(it.first)
+                                       Text(it.sourceName)
                                 },
                                 onClick = {
-                                    newsManager.sourceName.value = it.second
+                                    newsManager.sourceName.value = it
                                     isMenuExpanded = false
                             })
                         }

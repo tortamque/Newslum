@@ -18,7 +18,9 @@ class NewsManager {
 
     val selectedCategory: MutableState<ArticleCategory> = mutableStateOf(ArticleCategory.ALL_NEWS)
 
-    val sourceName = mutableStateOf("abc-news")
+    val sourceName = mutableStateOf(SourcesEnum.ABCNews)
+    private val _getArticleBySource = mutableStateOf(TopNewsResponse())
+    val getArticlesBySource: MutableState<TopNewsResponse> = _getArticleBySource
 
     init {
         getArticlesByCategory(selectedCategory.value.categoryKey)
@@ -33,6 +35,26 @@ class NewsManager {
             ) {
                 if(response.isSuccessful){
                     _getArticleByCategory.value = response.body()!!
+                } else{
+                    Log.d("Error", response.errorBody().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<TopNewsResponse>, t: Throwable) {
+                Log.d("Error", t.printStackTrace().toString())
+            }
+        })
+    }
+
+    fun getArticlesBySource(){
+        val service = Api.retrofitService.getArticlesBySource(sourceName.value.sourceKey, "us")
+        service.enqueue(object: Callback<TopNewsResponse> {
+            override fun onResponse(
+                call: Call<TopNewsResponse>,
+                response: Response<TopNewsResponse>
+            ) {
+                if(response.isSuccessful){
+                    _getArticleBySource.value = response.body()!!
                 } else{
                     Log.d("Error", response.errorBody().toString())
                 }
