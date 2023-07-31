@@ -31,7 +31,6 @@ class NewsManager {
             ) {
                 if(response.isSuccessful){
                     _getArticleByCategory.value = response.body()!!
-                    Log.d("saas", "Got articles")
                 } else{
                     Log.d("Error", response.errorBody().toString())
                 }
