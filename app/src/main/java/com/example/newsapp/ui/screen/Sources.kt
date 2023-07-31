@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.ArrowForward
@@ -120,6 +122,7 @@ fun SourceContent(
 @Composable
 fun SourceItem(article: TopNewsArticle){
     val urlHandler = LocalUriHandler.current
+    val descriptionScrollState = rememberScrollState()
 
     Card(
         Modifier
@@ -133,7 +136,10 @@ fun SourceItem(article: TopNewsArticle){
             Row(
                 Modifier.weight(5.0f)
             ){
-                Column(Modifier.padding(end = 10.dp).weight(3.0f)){
+                Column(
+                    Modifier
+                        .padding(end = 10.dp)
+                        .weight(3.0f)){
                     Text(
                         article.title ?: "Not available",
                         maxLines = 3,
@@ -148,7 +154,7 @@ fun SourceItem(article: TopNewsArticle){
                         article.description ?: "Not available",
                         color = Color.Gray,
                         fontSize = 15.sp,
-                        maxLines = 3
+                        modifier = Modifier.verticalScroll(descriptionScrollState)
                     )
                 }
                 CoilImage(
@@ -164,7 +170,10 @@ fun SourceItem(article: TopNewsArticle){
                 )
             }
             Row(
-                modifier = Modifier.padding(top = 5.dp).weight(1.0f).fillMaxSize(),
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .weight(1.0f)
+                    .fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
