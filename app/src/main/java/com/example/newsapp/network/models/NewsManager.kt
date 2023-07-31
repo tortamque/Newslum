@@ -18,6 +18,8 @@ class NewsManager {
 
     val selectedCategory: MutableState<ArticleCategory> = mutableStateOf(ArticleCategory.ALL_NEWS)
 
+    val sourceName = mutableStateOf("abc-news")
+
     init {
         getArticlesByCategory(selectedCategory.value.categoryKey)
     }
