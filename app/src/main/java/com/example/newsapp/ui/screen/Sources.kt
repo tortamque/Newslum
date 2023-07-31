@@ -178,7 +178,7 @@ fun SourceItem(article: TopNewsArticle){
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Text(
-                    "Read more on New York Times",
+                    "Read the full article",
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
                 )
