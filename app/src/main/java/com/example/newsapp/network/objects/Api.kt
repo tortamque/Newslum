@@ -1,8 +1,11 @@
 package com.example.newsapp.network.objects
 
 import com.example.newsapp.network.services.NewsService
+import com.example.newsapp.sensitive.Sensitive
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -13,9 +16,20 @@ object Api {
         .add(KotlinJsonAdapterFactory())
         .build()
 
+    private val httpClient = OkHttpClient.Builder().apply {
+        addInterceptor(
+            Interceptor{chain->
+                val builder = chain.request().newBuilder()
+                builder.header("X-Api-Key", Sensitive.API_KEY)
+                return@Interceptor chain.proceed(builder.build())
+            }
+        )
+    }.build()
+
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl(BASE_URL)
+        .client(httpClient)
         .build()
 
     val retrofitService : NewsService by lazy {

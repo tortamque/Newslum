@@ -18,8 +18,12 @@ class NewsManager {
 
     val selectedCategory: MutableState<ArticleCategory> = mutableStateOf(ArticleCategory.ALL_NEWS)
 
+    init {
+        getArticlesByCategory(selectedCategory.value.categoryKey)
+    }
+
     fun getArticlesByCategory(category: String){
-        val service = Api.retrofitService.getArticlesByCategory(category, "us", Sensitive.API_KEY)
+        val service = Api.retrofitService.getArticlesByCategory(category, "us")
         service.enqueue(object: Callback<TopNewsResponse> {
             override fun onResponse(
                 call: Call<TopNewsResponse>,
@@ -27,6 +31,7 @@ class NewsManager {
             ) {
                 if(response.isSuccessful){
                     _getArticleByCategory.value = response.body()!!
+                    Log.d("saas", "Got articles")
                 } else{
                     Log.d("Error", response.errorBody().toString())
                 }
