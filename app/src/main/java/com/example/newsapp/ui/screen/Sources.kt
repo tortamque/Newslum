@@ -90,8 +90,11 @@ fun Sources(
         )
         }
     ) { appBarPadding ->
+        newsManager.getArticlesBySource()
+        val articlesBySource = newsManager.getArticlesBySource.value
+
         SourceContent(
-            articles = listOf(),
+            articles = articlesBySource.articles ?: listOf(),
             appBarPadding,
             navBarPadding
         )
@@ -131,22 +134,22 @@ fun SourceItem(article: TopNewsArticle){
                 Modifier.weight(5.0f)
             ){
                 Column(Modifier.padding(end = 10.dp).weight(3.0f)){
-                    article.title?.let { Text(
-                        it,
+                    Text(
+                        article.title ?: "Not available",
                         maxLines = 3,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = Color.Black
-                    ) }
+                    )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    article.description?.let { Text(
-                        it,
+                    Text(
+                        article.description ?: "Not available",
                         color = Color.Gray,
                         fontSize = 15.sp,
                         maxLines = 3
-                    ) }
+                    )
                 }
                 CoilImage(
                     imageModel = article.urlToImage,
