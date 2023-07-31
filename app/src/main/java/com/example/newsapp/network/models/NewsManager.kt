@@ -7,7 +7,6 @@ import com.example.newsapp.models.ArticleCategory
 import com.example.newsapp.models.getCategory
 import com.example.newsapp.models.repository.TopNewsResponse
 import com.example.newsapp.network.objects.Api
-import com.example.newsapp.sensitive.Sensitive
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,7 +46,7 @@ class NewsManager {
     }
 
     fun getArticlesBySource(){
-        val service = Api.retrofitService.getArticlesBySource(sourceName.value.sourceKey, "us")
+        val service = Api.retrofitService.getArticlesBySource(sourceName.value.sourceKey)
         service.enqueue(object: Callback<TopNewsResponse> {
             override fun onResponse(
                 call: Call<TopNewsResponse>,
