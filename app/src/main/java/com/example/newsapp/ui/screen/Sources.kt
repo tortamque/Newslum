@@ -1,9 +1,21 @@
 package com.example.newsapp.ui.screen
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,15 +30,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.newsapp.R
+import com.example.newsapp.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.network.models.SourcesEnum
+import com.skydoves.landscapist.coil.CoilImage
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sources(
-    newsManager: NewsManager
+    newsManager: NewsManager,
+    navBarPadding: PaddingValues
 ){
     val items = SourcesEnum.values()
 
@@ -64,6 +89,88 @@ fun Sources(
             }
         )}
     ) {
+        //SourceContent() here
+    }
+}
 
+@Composable
+fun SourceContent(
+    articles: List<TopNewsArticle>,
+    appBarPadding: PaddingValues,
+    navBarPadding: PaddingValues,
+){
+    LazyColumn(
+        modifier = Modifier
+            .padding(top = appBarPadding.calculateTopPadding(), bottom = navBarPadding.calculateBottomPadding())
+    ){
+        items(articles){ article ->
+            SourceItem(article)
+        }
+    }
+}
+
+@Composable
+fun SourceItem(article: TopNewsArticle){
+    val urlHandler = LocalUriHandler.current
+
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .height(200.dp)
+    ){
+        Column(
+            Modifier.padding(15.dp)
+        ){
+            Row(
+                Modifier.weight(5.0f)
+            ){
+                Column(Modifier.padding(end = 10.dp).weight(3.0f)){
+                    article.title?.let { Text(
+                        it,
+                        maxLines = 3,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    ) }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    article.description?.let { Text(
+                        it,
+                        color = Color.Gray,
+                        fontSize = 15.sp,
+                        maxLines = 3
+                    ) }
+                }
+                CoilImage(
+                    imageModel = article.urlToImage,
+                    contentScale = ContentScale.Crop,
+                    error = ImageBitmap.imageResource(id = R.drawable.placeholder),
+                    placeHolder = ImageBitmap.imageResource(id = R.drawable.placeholder),
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .weight(2.0f)
+                        .clip(RoundedCornerShape(10.dp))
+                        .fillMaxSize()
+                )
+            }
+            Row(
+                modifier = Modifier.padding(top = 5.dp).weight(1.0f).fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Text(
+                    "Read more on New York Times",
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                )
+                IconButton(onClick = {
+                    article.url?.let { urlHandler.openUri(it) }
+                }) {
+                    Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = null)
+                }
+            }
+        }
     }
 }
