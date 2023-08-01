@@ -20,6 +20,7 @@ import com.example.newsapp.components.BottomMenu
 import com.example.newsapp.data.models.BottomMenuScreen
 import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.network.objects.Api
 import com.example.newsapp.ui.screen.DetailScreen
 import com.example.newsapp.ui.screen.Sources
 import com.example.newsapp.ui.screen.TopNews
@@ -44,7 +45,7 @@ fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
 @Composable
 fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues){
     val newsManager = remember {
-        NewsManager()
+    NewsManager(Api.retrofitService)
     }
 
     val articles = mutableListOf<TopNewsArticle>()
