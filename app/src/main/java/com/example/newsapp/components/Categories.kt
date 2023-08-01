@@ -1,5 +1,6 @@
 package com.example.newsapp.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.newsapp.data.models.ArticleCategory
 import com.example.newsapp.data.models.getAllCategories
-import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.ui.MainViewModel
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun CategoriesTab(
     onFetch: (ArticleCategory) -> Unit = {},
-    newsManager: NewsManager
+    viewModel: MainViewModel
 ){
     val categories = getAllCategories()
 
@@ -32,7 +34,7 @@ fun CategoriesTab(
                 CategoryItem(
                     category = category,
                     onFetch = onFetch,
-                    isSelected = newsManager.selectedCategory.value.categoryKey == category.categoryKey
+                    isSelected = viewModel.selectedCategory.value.categoryKey == category.categoryKey
                 )
             }
         }

@@ -49,18 +49,19 @@ fun Navigation(
     viewModel: MainViewModel
 ){
     val newsManager = remember {
-    NewsManager(Api.retrofitService)
+        NewsManager(Api.retrofitService)
     }
 
     val articles = mutableListOf<TopNewsArticle>()
-    articles.addAll(newsManager.getArticlesByCategory.value.articles ?: listOf())
+    articles.addAll(viewModel.categoryNewsResponse.value.articles ?: listOf())
 
     NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
         bottomNavigation(
             navController = navHostController,
             paddingValues = paddingValues,
             articles = articles,
-            newsManager
+            newsManager = newsManager,
+            viewModel = viewModel
         )
         composable(
             "Detail/{index}",
@@ -73,7 +74,7 @@ fun Navigation(
                     articles.addAll(newsManager.searchNewsResponse.value.articles ?: listOf())
                 } else{
                     articles.clear()
-                    articles.addAll(newsManager.getArticlesByCategory.value.articles ?: listOf())
+                    articles.addAll(viewModel.categoryNewsResponse.value.articles ?: listOf())
                 }
                 val article = articles[index]
 
@@ -87,7 +88,8 @@ fun NavGraphBuilder.bottomNavigation(
     navController: NavController,
     paddingValues: PaddingValues,
     articles: List<TopNewsArticle>,
-    newsManager: NewsManager
+    newsManager: NewsManager,
+    viewModel: MainViewModel
 ){
     composable(BottomMenuScreen.TopNews.route){
         TopNews(
@@ -95,7 +97,8 @@ fun NavGraphBuilder.bottomNavigation(
             paddingValues = paddingValues,
             articles = articles,
             newsManager = newsManager,
-            query = newsManager.query
+            query = newsManager.query,
+            viewModel = viewModel
         )
     }
 

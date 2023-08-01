@@ -17,11 +17,6 @@ import retrofit2.Response
 class NewsManager(
     private val service: NewsService
 ){
-    private val _getArticleByCategory = mutableStateOf(TopNewsResponse())
-    val getArticlesByCategory: MutableState<TopNewsResponse> = _getArticleByCategory
-
-    val selectedCategory: MutableState<ArticleCategory> = mutableStateOf(ArticleCategory.ALL_NEWS)
-
     val sourceName = mutableStateOf(SourcesEnum.ABCNews)
     private val _getArticleBySource = mutableStateOf(TopNewsResponse())
     val getArticlesBySource: MutableState<TopNewsResponse> = _getArticleBySource
@@ -73,10 +68,5 @@ class NewsManager(
                 Log.d("Error", t.printStackTrace().toString())
             }
         })
-    }
-
-    fun onSelectedCategoryChanged(category: ArticleCategory){
-        val newCategory = getCategory(category.categoryName)
-        selectedCategory.value = newCategory
     }
 }

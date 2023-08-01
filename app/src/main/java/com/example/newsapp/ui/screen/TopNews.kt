@@ -40,6 +40,7 @@ import com.example.newsapp.data.models.MockData
 import com.example.newsapp.data.models.MockData.getTimeAgo
 import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.ui.MainViewModel
 import com.skydoves.landscapist.coil.CoilImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +50,8 @@ fun TopNews(
     paddingValues: PaddingValues,
     articles: List<TopNewsArticle>,
     newsManager: NewsManager,
-    query: MutableState<String>
+    query: MutableState<String>,
+    viewModel: MainViewModel
 ){
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
@@ -78,10 +80,10 @@ fun TopNews(
             ){
                 item {
                     CategoriesTab(
-                        newsManager = newsManager,
+                        viewModel = viewModel,
                         onFetch = {category ->
-                            newsManager.onSelectedCategoryChanged(category)
-                            newsManager.getArticlesByCategory(category.categoryKey)
+                            viewModel.onSelectedCategoryChanged(category)
+                            viewModel.getArticlesByCategory(category.categoryKey)
                         })
                 }
 
