@@ -11,4 +11,7 @@ interface NewsService {
 
     @GET("everything")
     fun getArticlesBySource(@Query("domains") category: String): Call<TopNewsResponse>
+
+    @GET("everything")
+    fun getArticlesByQuery(@Query("q") query: String): Call<TopNewsResponse>
 }
