@@ -63,6 +63,13 @@ fun TopNews(
                 .fillMaxWidth(),
         ) {
             SearchBar(query = query, newsManager = newsManager)
+            val searchText = query.value
+            val results = mutableListOf<TopNewsArticle>()
+            if(searchText != ""){
+                results.addAll(newsManager.searchNewsResponse.value.articles ?: articles)
+            } else{
+                results.addAll(articles)
+            }
 
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,9 +84,9 @@ fun TopNews(
                         })
                 }
 
-                items(articles.size){ index ->
+                items(results.size){ index ->
                     TopNewsItem(
-                        article = articles[index],
+                        article = results[index],
                         onClick = {
                             navController.navigate("Detail/$index")
                         }
@@ -117,15 +124,19 @@ fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
                 .padding(top = 15.dp, bottom = 15.dp, start = 30.dp, end = 30.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(article.title!!, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 18.sp)
+                article.title?.let {
+                    Text(article.title, color = Color.Black, fontWeight = FontWeight.SemiBold, modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 18.sp)
+                }
                 Spacer(modifier = Modifier
                     .height(15.dp)
                     .fillMaxWidth())
                 Row{
                     Text(article.author?:"Unknown", color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
-                    Text(MockData.stringToDate(article.publishedAt!!).getTimeAgo(), color = Color.Gray, modifier = Modifier
-                        .weight(1.0f)
-                        .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
+                    article.publishedAt?.let {
+                        Text(MockData.stringToDate(article.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
+                            .weight(1.0f)
+                            .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
+                    }
                 }
             }
         }

@@ -47,7 +47,8 @@ fun Navigation(navHostController: NavHostController, paddingValues: PaddingValue
         NewsManager()
     }
 
-    val articles = newsManager.getArticlesByCategory.value.articles ?: listOf()
+    val articles = mutableListOf(TopNewsArticle())
+    articles.addAll(newsManager.getArticlesByCategory.value.articles ?: listOf(TopNewsArticle()))
 
     NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
         bottomNavigation(
@@ -62,6 +63,13 @@ fun Navigation(navHostController: NavHostController, paddingValues: PaddingValue
         ){
             val index = it.arguments?.getInt("index")
             index?.let {
+                if(newsManager.query.value != ""){
+                    articles.clear()
+                    articles.addAll(newsManager.searchNewsResponse.value.articles ?: listOf())
+                } else{
+                    articles.clear()
+                    articles.addAll(newsManager.getArticlesByCategory.value.articles ?: listOf())
+                }
                 val article = articles[index]
 
                 DetailScreen(navController = navHostController, article, paddingValues)
