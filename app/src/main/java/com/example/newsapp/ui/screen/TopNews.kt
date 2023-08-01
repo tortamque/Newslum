@@ -63,13 +63,14 @@ fun TopNews(
                 .fillMaxWidth(),
         ) {
             SearchBar(query = query, newsManager = newsManager)
-            val searchText = query.value
+
             val results = mutableListOf<TopNewsArticle>()
-            if(searchText != ""){
-                results.addAll(newsManager.searchNewsResponse.value.articles ?: articles)
-            } else{
-                results.addAll(articles)
-            }
+            searchArticles(
+                query = query,
+                results = results,
+                newsManager = newsManager,
+                articles = articles
+            )
 
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -154,4 +155,18 @@ fun PreviewTopNews(){
             publishedAt = "2023-07-15T13:30:00Z"
         )
     )
+}
+
+fun searchArticles(
+    query: MutableState<String>,
+    results:  MutableList<TopNewsArticle>,
+    newsManager: NewsManager,
+    articles: List<TopNewsArticle>
+){
+    val searchText = query.value
+    if(searchText != ""){
+        results.addAll(newsManager.searchNewsResponse.value.articles ?: articles)
+    } else{
+        results.addAll(articles)
+    }
 }
