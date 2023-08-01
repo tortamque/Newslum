@@ -3,15 +3,20 @@ package com.example.newsapp.network.models
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.newsapp.models.ArticleCategory
-import com.example.newsapp.models.getCategory
-import com.example.newsapp.models.repository.TopNewsResponse
+import com.example.newsapp.data.models.ArticleCategory
+import com.example.newsapp.data.models.getCategory
+import com.example.newsapp.data.models.repository.TopNewsResponse
 import com.example.newsapp.network.objects.Api
+import com.example.newsapp.network.services.NewsService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsManager {
+class NewsManager(
+    private val service: NewsService
+){
     private val _getArticleByCategory = mutableStateOf(TopNewsResponse())
     val getArticlesByCategory: MutableState<TopNewsResponse> = _getArticleByCategory
 
@@ -25,28 +30,8 @@ class NewsManager {
     private val _searchNewsResponse = mutableStateOf(TopNewsResponse())
     val searchNewsResponse: MutableState<TopNewsResponse> = _searchNewsResponse
 
-    init {
-        getArticlesByCategory(selectedCategory.value.categoryKey)
-    }
-
-    fun getArticlesByCategory(category: String){
-        val service = Api.retrofitService.getArticlesByCategory(category, "us")
-        service.enqueue(object: Callback<TopNewsResponse> {
-            override fun onResponse(
-                call: Call<TopNewsResponse>,
-                response: Response<TopNewsResponse>
-            ) {
-                if(response.isSuccessful){
-                    _getArticleByCategory.value = response.body()!!
-                } else{
-                    Log.d("Error", response.errorBody().toString())
-                }
-            }
-
-            override fun onFailure(call: Call<TopNewsResponse>, t: Throwable) {
-                Log.d("Error", t.printStackTrace().toString())
-            }
-        })
+    suspend fun getArticlesByCategory(category: String): TopNewsResponse = withContext(Dispatchers.IO){
+        service.getArticlesByCategory(category = category, country = "us")
     }
 
     fun getArticlesBySource(){
