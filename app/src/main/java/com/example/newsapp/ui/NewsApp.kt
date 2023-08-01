@@ -26,11 +26,11 @@ import com.example.newsapp.ui.screen.Sources
 import com.example.newsapp.ui.screen.TopNews
 
 @Composable
-fun NewsApp(){
+fun NewsApp(mainViewModel: MainViewModel){
     val navController = rememberNavController()
     val scrollState = rememberScrollState()
 
-    MainScreen(navController, scrollState)
+    MainScreen(navController, scrollState, mainViewModel)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
