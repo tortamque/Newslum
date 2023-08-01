@@ -1,4 +1,4 @@
-package com.example.newsapp.models
+package com.example.newsapp.data.models
 
 import com.example.newsapp.R
 

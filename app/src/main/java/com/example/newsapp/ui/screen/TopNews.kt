@@ -36,9 +36,9 @@ import androidx.navigation.NavController
 import com.example.newsapp.R
 import com.example.newsapp.components.CategoriesTab
 import com.example.newsapp.components.SearchBar
-import com.example.newsapp.models.MockData
-import com.example.newsapp.models.MockData.getTimeAgo
-import com.example.newsapp.models.repository.TopNewsArticle
+import com.example.newsapp.data.models.MockData
+import com.example.newsapp.data.models.MockData.getTimeAgo
+import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
 import com.skydoves.landscapist.coil.CoilImage
 
@@ -134,7 +134,8 @@ fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
                 Row{
                     Text(article.author?:"Unknown", color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
                     article.publishedAt?.let {
-                        Text(MockData.stringToDate(article.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
+                        Text(
+                            MockData.stringToDate(article.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
                             .weight(1.0f)
                             .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
                     }

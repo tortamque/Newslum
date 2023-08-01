@@ -44,7 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newsapp.R
-import com.example.newsapp.models.repository.TopNewsArticle
+import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.network.models.SourcesEnum
 import com.skydoves.landscapist.coil.CoilImage

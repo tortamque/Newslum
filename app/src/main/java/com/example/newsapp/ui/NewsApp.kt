@@ -17,8 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsapp.components.BottomMenu
-import com.example.newsapp.models.BottomMenuScreen
-import com.example.newsapp.models.repository.TopNewsArticle
+import com.example.newsapp.data.models.BottomMenuScreen
+import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.ui.screen.DetailScreen
 import com.example.newsapp.ui.screen.Sources

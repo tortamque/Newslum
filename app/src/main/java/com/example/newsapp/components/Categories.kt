@@ -10,8 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.newsapp.models.ArticleCategory
-import com.example.newsapp.models.getAllCategories
+import com.example.newsapp.data.models.ArticleCategory
+import com.example.newsapp.data.models.getAllCategories
 import com.example.newsapp.network.models.NewsManager
 
 @Composable
