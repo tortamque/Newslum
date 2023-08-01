@@ -36,14 +36,18 @@ fun NewsApp(){
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navHostController: NavHostController, scrollState: ScrollState){
+fun MainScreen(navHostController: NavHostController, scrollState: ScrollState, mainViewModel: MainViewModel){
     Scaffold(bottomBar = { BottomMenu(navController = navHostController)}) {
-        Navigation(navHostController, it)
+        Navigation(navHostController, it, mainViewModel)
     }
 }
 
 @Composable
-fun Navigation(navHostController: NavHostController, paddingValues: PaddingValues){
+fun Navigation(
+    navHostController: NavHostController,
+    paddingValues: PaddingValues,
+    viewModel: MainViewModel
+){
     val newsManager = remember {
     NewsManager(Api.retrofitService)
     }
