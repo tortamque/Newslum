@@ -1,7 +1,5 @@
 package com.example.newsapp.ui.screen
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsapp.R
 import com.example.newsapp.components.CategoriesTab
+import com.example.newsapp.components.SearchBar
 import com.example.newsapp.models.MockData
 import com.example.newsapp.models.MockData.getTimeAgo
 import com.example.newsapp.models.repository.TopNewsArticle
@@ -44,18 +44,26 @@ import com.skydoves.landscapist.coil.CoilImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopNews(navController: NavController, paddingValues: PaddingValues, articles: List<TopNewsArticle>, newsManager: NewsManager){
+fun TopNews(
+    navController: NavController,
+    paddingValues: PaddingValues,
+    articles: List<TopNewsArticle>,
+    newsManager: NewsManager,
+    query: MutableState<String>
+){
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
             title = { Text("Top News") }
         )}
-    ){ paddingValues ->
+    ){ scaffoldPaddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(scaffoldPaddingValues)
                 .fillMaxWidth(),
         ) {
+            SearchBar(query = query, newsManager = newsManager)
+
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
