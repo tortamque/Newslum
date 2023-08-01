@@ -47,8 +47,8 @@ fun Navigation(navHostController: NavHostController, paddingValues: PaddingValue
         NewsManager()
     }
 
-    val articles = mutableListOf(TopNewsArticle())
-    articles.addAll(newsManager.getArticlesByCategory.value.articles ?: listOf(TopNewsArticle()))
+    val articles = mutableListOf<TopNewsArticle>()
+    articles.addAll(newsManager.getArticlesByCategory.value.articles ?: listOf())
 
     NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
         bottomNavigation(
