@@ -1,8 +1,8 @@
 package com.example.newsapp.ui.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,8 +26,10 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,38 +40,52 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.R
 import com.example.newsapp.models.MockData
 import com.example.newsapp.models.MockData.getTimeAgo
-import com.example.newsapp.models.NewsData
+import com.example.newsapp.models.repository.TopNewsArticle
+import com.skydoves.landscapist.coil.CoilImage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     navController: NavController,
-    newsData: NewsData,
+    article: TopNewsArticle,
+    externalPaddingValues: PaddingValues
 ){
     val defaultPadding = 20.dp
     val scrollState = rememberScrollState()
+    val urlHandler = LocalUriHandler.current
     
     Scaffold(
-        topBar = { DetailScreenAppBar(onBackPressed = {navController.popBackStack()}, title = newsData.title)}
+        topBar = {
+            DetailScreenAppBar(
+                onBackPressed = {
+                    navController.popBackStack()
+                },
+                title = article.title?:"Not available"
+            )
+        }
     ) {paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(horizontal = 20.dp),
+                .padding(
+                    start = 20.dp,
+                    end = 20.dp,
+                    bottom = externalPaddingValues.calculateBottomPadding()
+                ),
         ) {
             Row(
                 Modifier.padding(bottom = defaultPadding/2, top = paddingValues.calculateTopPadding() + defaultPadding/2)
             ) {
                 Text(
-                    newsData.author,
+                    article.author?:"Not available",
                     color = Color.Black,
                     modifier = Modifier.weight(1.0f),
                     fontSize = 16.sp
                 )
                 Text(
-                    MockData.stringToDate(newsData.publishedAt).getTimeAgo(),
+                    MockData.stringToDate(article.publishedAt!!).getTimeAgo(),
                     color = Color.Gray,
                     modifier = Modifier
                         .weight(1.0f)
@@ -78,11 +94,11 @@ fun DetailScreen(
                     fontSize = 14.sp
                 )
             }
-
-            Image(
-                painter = painterResource(id = newsData.imageId),
-                contentDescription = newsData.title,
+            CoilImage(
+                imageModel = article.urlToImage,
                 contentScale = ContentScale.Crop,
+                error = ImageBitmap.imageResource(id = R.drawable.placeholder),
+                placeHolder = ImageBitmap.imageResource(id = R.drawable.placeholder),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -91,7 +107,7 @@ fun DetailScreen(
             )
 
             Text(
-                newsData.description,
+                article.description?:"Not available",
                 Modifier
                     .padding(bottom = defaultPadding),
                 color = Color.Black
@@ -99,13 +115,15 @@ fun DetailScreen(
 
             Button(
                 onClick = {
-                    navController.popBackStack()
+                    article.url?.let {
+                        urlHandler.openUri(it)
+                    }
                 },
                 modifier = Modifier
                     .padding(bottom = defaultPadding)
                     .align(CenterHorizontally)
             ) {
-                Text("Go Back")
+                Text("Read full article")
             }
         }
     }
@@ -140,13 +158,12 @@ fun DetailScreenAppBar(onBackPressed: ()->Unit = {}, title: String){
 fun PreviewDetailScreen(){
     DetailScreen(
         rememberNavController(),
-        NewsData(
-            id = 1,
-            imageId = R.drawable.bear,
+        TopNewsArticle(
             author = "John Doe",
             title = "Bear Spotted Roaming in National Park",
             description = "A bear was spotted roaming freely in the popular national park, causing temporary closures of some trails for safety measures.",
             publishedAt = "2023-07-15T12:00:00Z"
         ),
+        PaddingValues()
     )
 }
