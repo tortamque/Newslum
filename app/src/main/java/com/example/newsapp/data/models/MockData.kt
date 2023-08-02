@@ -1,4 +1,4 @@
-package com.example.newsapp.models
+package com.example.newsapp.data.models
 
 import android.os.Build
 import com.example.newsapp.R
@@ -74,7 +74,7 @@ object MockData {
         )
     )
 
-    fun getNews(id: Int?): NewsData{
+    fun getNews(id: Int?): NewsData {
         return topNewsList.first{
             it.id == id
         }

@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,17 +30,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newsapp.R
 import com.example.newsapp.components.CategoriesTab
 import com.example.newsapp.components.SearchBar
-import com.example.newsapp.models.MockData
-import com.example.newsapp.models.MockData.getTimeAgo
-import com.example.newsapp.models.repository.TopNewsArticle
-import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.data.models.MockData
+import com.example.newsapp.data.models.MockData.getTimeAgo
+import com.example.newsapp.data.models.repository.TopNewsArticle
+import com.example.newsapp.ui.MainViewModel
 import com.skydoves.landscapist.coil.CoilImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,8 +48,8 @@ fun TopNews(
     navController: NavController,
     paddingValues: PaddingValues,
     articles: List<TopNewsArticle>,
-    newsManager: NewsManager,
-    query: MutableState<String>
+    query: MutableState<String>,
+    viewModel: MainViewModel
 ){
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
@@ -62,13 +62,12 @@ fun TopNews(
                 .padding(scaffoldPaddingValues)
                 .fillMaxWidth(),
         ) {
-            SearchBar(query = query, newsManager = newsManager)
+            SearchBar(query = query, viewModel = viewModel)
 
-            val results = mutableListOf<TopNewsArticle>()
-            searchArticles(
+
+            val results = searchArticles(
                 query = query,
-                results = results,
-                newsManager = newsManager,
+                viewModel = viewModel,
                 articles = articles
             )
 
@@ -78,13 +77,12 @@ fun TopNews(
             ){
                 item {
                     CategoriesTab(
-                        newsManager = newsManager,
+                        viewModel = viewModel,
                         onFetch = {category ->
-                            newsManager.onSelectedCategoryChanged(category)
-                            newsManager.getArticlesByCategory(category.categoryKey)
+                            viewModel.onSelectedCategoryChanged(category)
+                            viewModel.getArticlesByCategory(category.categoryKey)
                         })
                 }
-
                 items(results.size){ index ->
                     TopNewsItem(
                         article = results[index],
@@ -134,39 +132,28 @@ fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
                 Row{
                     Text(article.author?:"Unknown", color = Color.Black, modifier = Modifier.weight(1.0f), fontSize = 16.sp)
                     article.publishedAt?.let {
-                        Text(MockData.stringToDate(article.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
-                            .weight(1.0f)
-                            .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
+                        Text(
+                            MockData.stringToDate(article.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
+                                .weight(1.0f)
+                                .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
                     }
                 }
             }
         }
     }
 }
-
-@Preview(showBackground = true)
 @Composable
-fun PreviewTopNews(){
-    TopNewsItem(
-        TopNewsArticle(
-            author = "Jane Smith",
-            title = "Exciting Football Match Ends in Draw",
-            description = "In a thrilling football match, the two teams battled it out to a draw, with both sides displaying exceptional skills and teamwork.",
-            publishedAt = "2023-07-15T13:30:00Z"
-        )
-    )
-}
-
 fun searchArticles(
     query: MutableState<String>,
-    results:  MutableList<TopNewsArticle>,
-    newsManager: NewsManager,
-    articles: List<TopNewsArticle>
-){
+    articles: List<TopNewsArticle>,
+    viewModel: MainViewModel
+): MutableList<TopNewsArticle>{
+    val results = mutableListOf<TopNewsArticle>()
     val searchText = query.value
     if(searchText != ""){
-        results.addAll(newsManager.searchNewsResponse.value.articles ?: articles)
+        results.addAll(viewModel.queryNewsResponse.collectAsState().value.articles ?: articles)
     } else{
         results.addAll(articles)
     }
+    return results
 }

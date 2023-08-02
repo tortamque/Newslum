@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.newsapp.models.BottomMenuScreen
+import com.example.newsapp.data.models.BottomMenuScreen
 
 @Composable
 fun BottomMenu(navController: NavController){

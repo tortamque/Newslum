@@ -22,13 +22,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.ui.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
     query: MutableState<String>,
-    newsManager: NewsManager,
+    viewModel: MainViewModel,
 ){
     val localFocusManager = LocalFocusManager.current
 
@@ -61,7 +61,7 @@ fun SearchBar(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     if(query.value != ""){
-                        newsManager.getArticlesByQuery(query.value)
+                        viewModel.getArticlesByQuery(query.value)
                     }
                     localFocusManager.clearFocus()
                 }

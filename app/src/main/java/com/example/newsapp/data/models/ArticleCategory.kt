@@ -1,6 +1,6 @@
-package com.example.newsapp.models
+package com.example.newsapp.data.models
 
-import com.example.newsapp.models.ArticleCategory.*
+import com.example.newsapp.data.models.ArticleCategory.*
 
 enum class ArticleCategory(val categoryName: String, val categoryKey: String){
     BUSINESS("Business", "Business"),
@@ -26,7 +26,7 @@ fun getAllCategories(): List<ArticleCategory>{
     )
 }
 
-fun getCategory(name: String): ArticleCategory{
+fun getCategory(name: String): ArticleCategory {
     val map = values().associateBy(ArticleCategory::categoryName)
 
     return map[name]!!

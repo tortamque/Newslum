@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.newsapp.R
-import com.example.newsapp.models.MockData
-import com.example.newsapp.models.MockData.getTimeAgo
-import com.example.newsapp.models.repository.TopNewsArticle
+import com.example.newsapp.data.models.MockData
+import com.example.newsapp.data.models.MockData.getTimeAgo
+import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.skydoves.landscapist.coil.CoilImage
 
 

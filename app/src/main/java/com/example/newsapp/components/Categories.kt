@@ -1,5 +1,6 @@
 package com.example.newsapp.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,16 +9,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.newsapp.models.ArticleCategory
-import com.example.newsapp.models.getAllCategories
-import com.example.newsapp.network.models.NewsManager
+import com.example.newsapp.data.models.ArticleCategory
+import com.example.newsapp.data.models.getAllCategories
+import com.example.newsapp.ui.MainViewModel
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun CategoriesTab(
     onFetch: (ArticleCategory) -> Unit = {},
-    newsManager: NewsManager
+    viewModel: MainViewModel
 ){
     val categories = getAllCategories()
 
@@ -32,7 +35,7 @@ fun CategoriesTab(
                 CategoryItem(
                     category = category,
                     onFetch = onFetch,
-                    isSelected = newsManager.selectedCategory.value.categoryKey == category.categoryKey
+                    isSelected = viewModel.selectedCategory.collectAsState().value.categoryKey == category.categoryKey
                 )
             }
         }
