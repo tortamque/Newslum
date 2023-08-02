@@ -7,8 +7,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,8 +21,6 @@ import androidx.navigation.navArgument
 import com.example.newsapp.components.BottomMenu
 import com.example.newsapp.data.models.BottomMenuScreen
 import com.example.newsapp.data.models.repository.TopNewsArticle
-import com.example.newsapp.network.models.NewsManager
-import com.example.newsapp.network.objects.Api
 import com.example.newsapp.ui.screen.DetailScreen
 import com.example.newsapp.ui.screen.Sources
 import com.example.newsapp.ui.screen.TopNews
@@ -43,27 +42,22 @@ fun MainScreen(navHostController: NavHostController, scrollState: ScrollState, m
     }
 }
 
-@SuppressLint("StateFlowValueCalledInComposition", "CoroutineCreationDuringComposition")
 @Composable
 fun Navigation(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     viewModel: MainViewModel
 ){
-    val newsManager = remember {
-        NewsManager(Api.retrofitService)
-    }
-
     val articles = viewModel.categoryNewsResponse.collectAsState().value.articles ?: listOf()
 
-    //viewModel.getArticlesByCategory(ArticleCategory.ALL_NEWS.categoryKey)
-
     NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
+        val queryState = mutableStateOf(viewModel.query.value)
+
         bottomNavigation(
             navController = navHostController,
             paddingValues = paddingValues,
             articles = articles,
-            newsManager = newsManager,
+            query = queryState,
             viewModel = viewModel
         )
         composable(
@@ -72,9 +66,9 @@ fun Navigation(
         ){
             val index = it.arguments?.getInt("index")
             index?.let {
-                if(newsManager.query.value != ""){
+                if(queryState.value != ""){
                     articles.toMutableList().clear()
-                    articles.toMutableList().addAll(newsManager.searchNewsResponse.value.articles ?: listOf())
+                    articles.toMutableList().addAll(viewModel.queryNewsResponse.value.articles ?: listOf())
                 } else{
                     articles.toMutableList().clear()
                     articles.toMutableList().addAll(viewModel.categoryNewsResponse.value.articles ?: listOf())
@@ -91,7 +85,7 @@ fun NavGraphBuilder.bottomNavigation(
     navController: NavController,
     paddingValues: PaddingValues,
     articles: List<TopNewsArticle>,
-    newsManager: NewsManager,
+    query: MutableState<String>,
     viewModel: MainViewModel
 ){
     composable(BottomMenuScreen.TopNews.route){
@@ -99,13 +93,15 @@ fun NavGraphBuilder.bottomNavigation(
             navController = navController,
             paddingValues = paddingValues,
             articles = articles,
-            newsManager = newsManager,
-            query = newsManager.query,
+            query = query,
             viewModel = viewModel
         )
     }
 
     composable(BottomMenuScreen.Sources.route){
-        Sources(newsManager, paddingValues)
+        Sources(
+            viewModel = viewModel,
+            navBarPadding = paddingValues
+        )
     }
 }
