@@ -1,5 +1,6 @@
 package com.example.newsapp.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -95,6 +95,8 @@ fun TopNews(
                         }
                     )
                 }
+
+                Log.d("Info", "Loaded articles")
             }
         }
     }
@@ -147,19 +149,6 @@ fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewTopNews(){
-    TopNewsItem(
-        TopNewsArticle(
-            author = "Jane Smith",
-            title = "Exciting Football Match Ends in Draw",
-            description = "In a thrilling football match, the two teams battled it out to a draw, with both sides displaying exceptional skills and teamwork.",
-            publishedAt = "2023-07-15T13:30:00Z"
-        )
-    )
-}
-
 fun searchArticles(
     query: MutableState<String>,
     results:  MutableList<TopNewsArticle>,
@@ -172,4 +161,5 @@ fun searchArticles(
     } else{
         results.addAll(articles)
     }
+
 }

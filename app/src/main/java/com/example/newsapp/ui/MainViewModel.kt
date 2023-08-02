@@ -1,8 +1,6 @@
 package com.example.newsapp.ui
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.MainApp
@@ -33,9 +31,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
         viewModelScope.launch(Dispatchers.IO){
             _categoryNewsResponse.value = repository.getArticlesByCategory(category)
+            _isLoading.value = false
         }
-
-        _isLoading.value = false
     }
 
     fun onSelectedCategoryChanged(category: ArticleCategory){

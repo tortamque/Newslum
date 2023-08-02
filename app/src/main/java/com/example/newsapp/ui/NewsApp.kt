@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -17,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsapp.components.BottomMenu
+import com.example.newsapp.data.models.ArticleCategory
 import com.example.newsapp.data.models.BottomMenuScreen
 import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
@@ -42,6 +44,7 @@ fun MainScreen(navHostController: NavHostController, scrollState: ScrollState, m
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition", "CoroutineCreationDuringComposition")
 @Composable
 fun Navigation(
     navHostController: NavHostController,
@@ -52,8 +55,9 @@ fun Navigation(
         NewsManager(Api.retrofitService)
     }
 
-    val articles = mutableListOf<TopNewsArticle>()
-    articles.addAll(viewModel.categoryNewsResponse.value.articles ?: listOf())
+    val articles = viewModel.categoryNewsResponse.collectAsState().value.articles ?: listOf()
+
+    viewModel.getArticlesByCategory(ArticleCategory.ALL_NEWS.categoryKey)
 
     NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
         bottomNavigation(
@@ -70,11 +74,11 @@ fun Navigation(
             val index = it.arguments?.getInt("index")
             index?.let {
                 if(newsManager.query.value != ""){
-                    articles.clear()
-                    articles.addAll(newsManager.searchNewsResponse.value.articles ?: listOf())
+                    articles.toMutableList().clear()
+                    articles.toMutableList().addAll(newsManager.searchNewsResponse.value.articles ?: listOf())
                 } else{
-                    articles.clear()
-                    articles.addAll(viewModel.categoryNewsResponse.value.articles ?: listOf())
+                    articles.toMutableList().clear()
+                    articles.toMutableList().addAll(viewModel.categoryNewsResponse.value.articles ?: listOf())
                 }
                 val article = articles[index]
 
