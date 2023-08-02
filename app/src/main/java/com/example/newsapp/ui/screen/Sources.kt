@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,21 +46,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newsapp.R
 import com.example.newsapp.data.models.repository.TopNewsArticle
-import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.network.models.SourcesEnum
+import com.example.newsapp.ui.MainViewModel
 import com.skydoves.landscapist.coil.CoilImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sources(
-    newsManager: NewsManager,
+    viewModel: MainViewModel,
     navBarPadding: PaddingValues
 ){
     val items = SourcesEnum.values()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
-            title = { Text(text = "News from ${newsManager.sourceName.value.sourceName}")},
+            title = { Text(text = "News from ${viewModel.sourceName.collectAsState().value.sourceName}")},
             actions = {
                 var isMenuExpanded by remember { mutableStateOf(false)}
                 IconButton(onClick = {
@@ -82,7 +83,8 @@ fun Sources(
                                        Text(it.sourceName)
                                 },
                                 onClick = {
-                                    newsManager.sourceName.value = it
+                                    viewModel.sourceName.value = it
+                                    viewModel.getArticlesBySource()
                                     isMenuExpanded = false
                             })
                         }
@@ -92,8 +94,8 @@ fun Sources(
         )
         }
     ) { appBarPadding ->
-        newsManager.getArticlesBySource()
-        val articlesBySource = newsManager.getArticlesBySource.value
+        viewModel.getArticlesBySource()
+        val articlesBySource = viewModel.sourceNewsResponse.collectAsState().value
 
         SourceContent(
             articles = articlesBySource.articles ?: listOf(),
