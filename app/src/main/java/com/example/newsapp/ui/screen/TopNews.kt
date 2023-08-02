@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +39,6 @@ import com.example.newsapp.components.SearchBar
 import com.example.newsapp.data.models.MockData
 import com.example.newsapp.data.models.MockData.getTimeAgo
 import com.example.newsapp.data.models.repository.TopNewsArticle
-import com.example.newsapp.network.models.NewsManager
 import com.example.newsapp.ui.MainViewModel
 import com.skydoves.landscapist.coil.CoilImage
 
@@ -48,7 +48,6 @@ fun TopNews(
     navController: NavController,
     paddingValues: PaddingValues,
     articles: List<TopNewsArticle>,
-    newsManager: NewsManager,
     query: MutableState<String>,
     viewModel: MainViewModel
 ){
@@ -63,13 +62,12 @@ fun TopNews(
                 .padding(scaffoldPaddingValues)
                 .fillMaxWidth(),
         ) {
-            SearchBar(query = query, newsManager = newsManager)
+            SearchBar(query = query, viewModel = viewModel)
 
-            val results = mutableListOf<TopNewsArticle>()
-            searchArticles(
+
+            val results = searchArticles(
                 query = query,
-                results = results,
-                newsManager = newsManager,
+                viewModel = viewModel,
                 articles = articles
             )
 
@@ -85,7 +83,6 @@ fun TopNews(
                             viewModel.getArticlesByCategory(category.categoryKey)
                         })
                 }
-
                 items(results.size){ index ->
                     TopNewsItem(
                         article = results[index],
@@ -137,26 +134,26 @@ fun TopNewsItem(article: TopNewsArticle, onClick: ()->Unit = {}){
                     article.publishedAt?.let {
                         Text(
                             MockData.stringToDate(article.publishedAt).getTimeAgo(), color = Color.Gray, modifier = Modifier
-                            .weight(1.0f)
-                            .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
+                                .weight(1.0f)
+                                .align(Alignment.Bottom), textAlign = TextAlign.End, fontSize = 14.sp)
                     }
                 }
             }
         }
     }
 }
-
+@Composable
 fun searchArticles(
     query: MutableState<String>,
-    results:  MutableList<TopNewsArticle>,
-    newsManager: NewsManager,
-    articles: List<TopNewsArticle>
-){
+    articles: List<TopNewsArticle>,
+    viewModel: MainViewModel
+): MutableList<TopNewsArticle>{
+    val results = mutableListOf<TopNewsArticle>()
     val searchText = query.value
     if(searchText != ""){
-        results.addAll(newsManager.searchNewsResponse.value.articles ?: articles)
+        results.addAll(viewModel.queryNewsResponse.collectAsState().value.articles ?: articles)
     } else{
         results.addAll(articles)
     }
-
+    return results
 }
