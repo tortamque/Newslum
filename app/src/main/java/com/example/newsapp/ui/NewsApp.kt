@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsapp.components.BottomMenu
-import com.example.newsapp.data.models.ArticleCategory
 import com.example.newsapp.data.models.BottomMenuScreen
 import com.example.newsapp.data.models.repository.TopNewsArticle
 import com.example.newsapp.network.models.NewsManager
@@ -57,7 +56,7 @@ fun Navigation(
 
     val articles = viewModel.categoryNewsResponse.collectAsState().value.articles ?: listOf()
 
-    viewModel.getArticlesByCategory(ArticleCategory.ALL_NEWS.categoryKey)
+    //viewModel.getArticlesByCategory(ArticleCategory.ALL_NEWS.categoryKey)
 
     NavHost(navController = navHostController, startDestination = BottomMenuScreen.TopNews.route){
         bottomNavigation(

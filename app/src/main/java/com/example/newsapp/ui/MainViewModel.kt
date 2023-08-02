@@ -28,7 +28,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     fun getArticlesByCategory(category: String){
         _isLoading.value = true
-
         viewModelScope.launch(Dispatchers.IO){
             _categoryNewsResponse.value = repository.getArticlesByCategory(category)
             _isLoading.value = false
