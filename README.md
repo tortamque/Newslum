@@ -71,15 +71,15 @@ https://github.com/tortamque/Newslum/assets/90132962/5490b05d-7b7d-4170-b8ac-71e
 ## Used Packages
 The Newslum app utilizes the following packages:
 
-| Name                            | Version   | Link on Maven Repository                                                            |
-|---------------------------------|-----------|--------------------------------------------------------------------------------------|
-| Logging Interceptor             | 4.7.2     | https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor           |
-| Landscapist Coil                | 1.4.1     | https://mvnrepository.com/artifact/com.github.skydoves/landscapist-coil                |
-| Moshi Kotlin                    | 1.9.3     | https://mvnrepository.com/artifact/com.squareup.moshi/moshi-kotlin                     |
-| Converter: Moshi                | 2.9.0     | https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-moshi              |
-| Retrofit                        | 2.9.0     | https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit                      |
-| Compose Material Icons Extended | 1.4.3     | https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended  |
-| Compose Navigation              | 2.7.0-rc01| https://mvnrepository.com/artifact/androidx.navigation/navigation-compose             |
+| Name                            | Version   | Link on Maven Repository                                                                      |
+|---------------------------------|-----------|-----------------------------------------------------------------------------------------------|
+| Logging Interceptor             | 4.7.2     | [Link](https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor)           |
+| Landscapist Coil                | 1.4.1     | [Link](https://mvnrepository.com/artifact/com.github.skydoves/landscapist-coil)               |
+| Moshi Kotlin                    | 1.9.3     | [Link](https://mvnrepository.com/artifact/com.squareup.moshi/moshi-kotlin)                    |
+| Converter: Moshi                | 2.9.0     | [Link](https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-moshi)             |
+| Retrofit                        | 2.9.0     | [Link](https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit)                    |
+| Compose Material Icons Extended | 1.4.3     | [Link](https://mvnrepository.com/artifact/androidx.compose.material/material-icons-extended)  |
+| Compose Navigation              | 2.7.0-rc01| [Link](https://mvnrepository.com/artifact/androidx.navigation/navigation-compose)             |
 
 <a name="licenses"/></a>
 ## License
