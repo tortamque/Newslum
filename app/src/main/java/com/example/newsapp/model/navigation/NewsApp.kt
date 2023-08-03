@@ -1,9 +1,7 @@
 package com.example.newsapp.model.navigation
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -29,15 +27,17 @@ import com.example.newsapp.viewmodel.MainViewModel
 @Composable
 fun NewsApp(mainViewModel: MainViewModel){
     val navController = rememberNavController()
-    val scrollState = rememberScrollState()
 
-    MainScreen(navController, scrollState, mainViewModel)
+    MainScreen(
+        navHostController = navController,
+        mainViewModel = mainViewModel
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navHostController: NavHostController, scrollState: ScrollState, mainViewModel: MainViewModel){
+fun MainScreen(navHostController: NavHostController, mainViewModel: MainViewModel){
     Scaffold(bottomBar = { BottomMenu(navController = navHostController) }) {
         Navigation(navHostController, it, mainViewModel)
     }
