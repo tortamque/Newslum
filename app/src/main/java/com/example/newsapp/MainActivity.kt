@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.newsapp.data.models.ArticleCategory
-import com.example.newsapp.ui.MainViewModel
-import com.example.newsapp.ui.NewsApp
-import com.example.newsapp.ui.theme.NewsAppTheme
+import com.example.newsapp.model.enums.ArticleCategory
+import com.example.newsapp.viewmodel.MainViewModel
+import com.example.newsapp.model.navigation.NewsApp
+import com.example.newsapp.view.ui.theme.NewsAppTheme
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
